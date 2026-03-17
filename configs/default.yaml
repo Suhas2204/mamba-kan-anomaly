@@ -1,0 +1,98 @@
+# ============================================================
+# Mamba-KAN Anomaly Detection — Experiment Configuration
+# ============================================================
+# Override any value via CLI: python -m src.training.trainer model.hidden_dim=128
+
+defaults:
+  - _self_
+
+# ── Experiment Metadata ──────────────────────────────────────
+experiment:
+  name: "mamba_kan_skab"
+  seed: 42
+  device: "auto"  # auto | cpu | cuda | mps
+  log_level: "INFO"
+
+# ── Data Pipeline ────────────────────────────────────────────
+data:
+  dataset: "skab"  # skab | nasa_cmapss | swat | custom
+  root_dir: "data/"
+  window_size: 64
+  stride: 1
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  normalize: true
+  scaler: "standard"  # standard | minmax | robust
+  num_workers: 4
+  batch_size: 128
+
+# ── Model Architecture ───────────────────────────────────────
+model:
+  name: "mamba_kan"  # mamba_kan | lstm | transformer
+  input_dim: null  # auto-detected from data
+  hidden_dim: 64
+  output_dim: 1
+  num_layers: 3
+  dropout: 0.1
+
+  # KAN Encoder
+  kan:
+    spline_order: 3
+    grid_size: 8
+    grid_range: [-1.0, 1.0]
+    residual_weight: 1.0
+    grid_epsilon: 0.02
+
+  # Mamba SSM Block
+  mamba:
+    state_dim: 16
+    conv_kernel: 4
+    expansion_factor: 2
+    dt_rank: "auto"  # auto | int
+    dt_min: 0.001
+    dt_max: 0.1
+    dt_init: "random"  # random | constant
+
+  # Anomaly Scoring Head
+  scoring:
+    method: "reconstruction"  # reconstruction | forecasting | hybrid
+    threshold_method: "dynamic"  # static | dynamic | percentile
+    percentile: 99.5
+
+# ── Training ─────────────────────────────────────────────────
+training:
+  epochs: 100
+  learning_rate: 1.0e-3
+  weight_decay: 1.0e-5
+  optimizer: "adamw"  # adam | adamw | sgd
+  scheduler: "cosine"  # cosine | step | plateau | none
+  scheduler_params:
+    T_max: 100
+    eta_min: 1.0e-6
+  gradient_clip_val: 1.0
+  early_stopping:
+    patience: 15
+    min_delta: 1.0e-4
+    monitor: "val_loss"
+
+# ── MLflow Tracking ──────────────────────────────────────────
+mlflow:
+  enabled: true
+  tracking_uri: "mlruns/"
+  experiment_name: "mamba-kan-anomaly"
+  log_every_n_steps: 10
+
+# ── Evaluation ───────────────────────────────────────────────
+evaluation:
+  metrics: ["precision", "recall", "f1", "auroc", "auprc"]
+  point_adjust: true  # PA%k adjustment for time-series
+  visualize_splines: true
+  save_predictions: true
+  benchmark_baselines: true
+
+# ── Serving ──────────────────────────────────────────────────
+serving:
+  host: "0.0.0.0"
+  port: 8000
+  model_path: "checkpoints/best_model.pt"
