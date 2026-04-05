@@ -18,8 +18,9 @@ env/
 *.swo
 
 # Data & checkpoints
-data/
-!src/data/*.py
+data/*.csv
+data/*.pkl
+data/*.parquet
 checkpoints/
 mlruns/
 outputs/
