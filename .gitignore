@@ -19,6 +19,7 @@ env/
 
 # Data & checkpoints
 data/
+!src/data/*.py
 checkpoints/
 mlruns/
 outputs/
