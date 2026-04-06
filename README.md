@@ -1,4 +1,4 @@
-# 🔍 Mamba-KAN Anomaly Detection
+# Mamba-KAN Anomaly Detection
 
 **The first hybrid architecture combining Mamba state-space models with Kolmogorov-Arnold Networks for interpretable sensor anomaly detection.**
 
@@ -9,7 +9,7 @@
 
 ---
 
-## 💡 Why This Matters
+## Why This Matters
 
 Traditional anomaly detectors face a tradeoff: **Transformers** capture long-range dependencies but scale quadratically O(n²); **LSTMs** are linear but struggle with long sequences; both use fixed activation functions that offer zero interpretability into *what* they learn.
 
@@ -23,7 +23,7 @@ Traditional anomaly detectors face a tradeoff: **Transformers** capture long-ran
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -44,7 +44,7 @@ Traditional anomaly detectors face a tradeoff: **Transformers** capture long-ran
 
 ---
 
-## 📊 Results on SKAB Benchmark
+## Results on SKAB Benchmark
 
 | Model | F1 | AUROC | AUPRC | Params | Latency |
 |-------|-----|-------|-------|--------|---------|
@@ -56,7 +56,7 @@ Traditional anomaly detectors face a tradeoff: **Transformers** capture long-ran
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Setup with uv
 
@@ -106,7 +106,7 @@ pytest tests/ -v --cov=src
 
 ---
 
-## 🧠 KAN Interpretability
+## KAN Interpretability
 
 The key differentiator: each KAN layer learns B-spline activation functions that can be plotted to reveal **what mathematical relationships the network discovered**.
 
@@ -125,7 +125,7 @@ Non-linear curves = network found complex relationships. Near-linear = raw signa
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 mamba-kan-anomaly-detection/
@@ -148,7 +148,7 @@ mamba-kan-anomaly-detection/
 
 ---
 
-## 🔧 Design Decisions
+## Design Decisions
 
 1. **Pure PyTorch Mamba** — No CUDA-only dependencies. Runs on CPU, CUDA, and MPS.
 2. **KAN from scratch** — Custom B-spline implementation for full control and understanding.
@@ -158,7 +158,7 @@ mamba-kan-anomaly-detection/
 
 ---
 
-## 📚 References
+## References
 
 - Gu & Dao (2023). *Mamba: Linear-Time Sequence Modeling with Selective State Spaces.* [arXiv:2312.00752](https://arxiv.org/abs/2312.00752)
 - Liu et al. (2024). *KAN: Kolmogorov-Arnold Networks.* ICLR 2025. [arXiv:2404.19756](https://arxiv.org/abs/2404.19756)
@@ -166,6 +166,6 @@ mamba-kan-anomaly-detection/
 
 ---
 
-## 📄 License
+## License
 
 MIT License — see [LICENSE](LICENSE) for details.
